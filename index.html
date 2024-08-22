@@ -66,17 +66,27 @@
     </div>
 
     <script>
-        // Load saved messages when the page loads
-        document.addEventListener('DOMContentLoaded', () => {
-            console.log('DOM fully loaded and parsed');
+        // Function to load and display messages
+        function loadMessages() {
+            console.log('Loading messages');
             const savedMessages = JSON.parse(localStorage.getItem('messages')) || [];
             const messagesDiv = document.getElementById('messages');
+            
+            messagesDiv.innerHTML = ''; // Clear existing messages
             
             savedMessages.forEach(message => {
                 messagesDiv.innerHTML += `<div>${message}</div>`;
             });
             
             messagesDiv.scrollTop = messagesDiv.scrollHeight; // Auto-scroll to the bottom
+        }
+
+        // Load saved messages when the page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            loadMessages(); // Initial load
+
+            // Refresh messages every 3 seconds
+            setInterval(loadMessages, 3000);
         });
 
         function sendMessage() {
