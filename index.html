@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Chatroom</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #1b1818;
+            margin: 0;
+            padding: 20px;
+            text-align: center;
+        }
+
+        #chatroom {
+            width: 300px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #5b5151;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            height: 300px; /* Adjusted height to accommodate the input and button */
+        }
+
+        #messages {
+            flex: 1;
+            overflow-y: auto;
+            margin-bottom: 10px;
+            border: 1px solid #000;
+            padding: 5px;
+            background-color: #900000;
+            text-align: left; /* Align messages to the left */
+        }
+
+        #messageInput {
+            width: calc(100% - 60px);
+            padding: 5px;
+            margin-right: 10px; /* Margin to separate from the button */
+            box-sizing: border-box; /* Include padding in width calculation */
+        }
+
+        button {
+            width: 50px;
+            padding: 5px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #1f5998;
+        }
+    </style>
+</head>
+<body>
+    <h1>Welcome to My Chatroom</h1>
+    <div id="chatroom">
+        <div id="messages"></div>
+        <div style="display: flex; align-items: center;">
+            <input type="text" id="messageInput" placeholder="Type a message...">
+            <button onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+
+    <script>
+        // Load saved messages when the page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('DOM fully loaded and parsed');
+            const savedMessages = JSON.parse(localStorage.getItem('messages')) || [];
+            const messagesDiv = document.getElementById('messages');
+            
+            savedMessages.forEach(message => {
+                messagesDiv.innerHTML += `<div>${message}</div>`;
+            });
+            
+            messagesDiv.scrollTop = messagesDiv.scrollHeight; // Auto-scroll to the bottom
+        });
+
+        function sendMessage() {
+            console.log('Send button clicked');
+            const messageInput = document.getElementById('messageInput');
+            const message = messageInput.value;
+
+            if (message.trim() !== "") {
+                const messagesDiv = document.getElementById('messages');
+                const savedMessages = JSON.parse(localStorage.getItem('messages')) || [];
+                
+                // Add new message to the messages div
+                messagesDiv.innerHTML += `<div>${message}</div>`;
+                
+                // Save the new message in localStorage
+                savedMessages.push(message);
+                localStorage.setItem('messages', JSON.stringify(savedMessages));
+                
+                // Clear the input field and auto-scroll
+                messageInput.value = '';
+                messagesDiv.scrollTop = messagesDiv.scrollHeight; // Auto-scroll to the bottom
+            } else {
+                console.log('Message is empty');
+            }
+        }
+    </script>
+</body>
+</html>
